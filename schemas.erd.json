@@ -10,7 +10,7 @@
     "show": 431,
     "database": 4,
     "databaseName": "einstein",
-    "canvasType": "@dineug/erd-editor/builtin-schema-sql",
+    "canvasType": "ERD",
     "language": 1,
     "tableNameCase": 4,
     "columnNameCase": 2,
@@ -301,29 +301,6 @@
         "meta": {
           "updateAt": 1727854919343,
           "createAt": 1727455550999
-        }
-      },
-      "Jj9-KJjcOU1wKsrcbNYm8": {
-        "id": "Jj9-KJjcOU1wKsrcbNYm8",
-        "name": "",
-        "comment": "",
-        "columnIds": [
-          "-fPSBjNWk5xPFcKJilK4u"
-        ],
-        "seqColumnIds": [
-          "-fPSBjNWk5xPFcKJilK4u"
-        ],
-        "ui": {
-          "x": 13,
-          "y": 708,
-          "zIndex": 515,
-          "widthName": 60,
-          "widthComment": 60,
-          "color": ""
-        },
-        "meta": {
-          "updateAt": 1727513144834,
-          "createAt": 1727513136667
         }
       },
       "5YW3RN2swIOvLyPmcIVRP": {
@@ -1773,26 +1750,6 @@
           "createAt": 1727512573366
         }
       },
-      "-fPSBjNWk5xPFcKJilK4u": {
-        "id": "-fPSBjNWk5xPFcKJilK4u",
-        "tableId": "Jj9-KJjcOU1wKsrcbNYm8",
-        "name": "",
-        "comment": "",
-        "dataType": "",
-        "default": "",
-        "options": 0,
-        "ui": {
-          "keys": 0,
-          "widthName": 60,
-          "widthComment": 60,
-          "widthDataType": 60,
-          "widthDefault": 60
-        },
-        "meta": {
-          "updateAt": 1727513144833,
-          "createAt": 1727513144833
-        }
-      },
       "VIlikAXFVJUZAnJg3PFDK": {
         "id": "VIlikAXFVJUZAnJg3PFDK",
         "tableId": "5YW3RN2swIOvLyPmcIVRP",
@@ -3034,18 +2991,6 @@
         "name": 1727512598413,
         "dataType": 1727512622022
       }
-    ],
-    "Jj9-KJjcOU1wKsrcbNYm8": [
-      "tableEntities",
-      1727513136666,
-      1727667635819,
-      {}
-    ],
-    "-fPSBjNWk5xPFcKJilK4u": [
-      "tableColumnEntities",
-      1727513144832,
-      -1,
-      {}
     ],
     "5YW3RN2swIOvLyPmcIVRP": [
       "tableEntities",

@@ -1,5 +1,12 @@
 # cheolsu-ai
 =======
+## How to run in local environment
+1. You must add `.env.local` file in `/env` directory. Environments format is below.
+2. run docker compose command like this.
+```bash
+docker compose -f docker-compose.local.yaml up --build -d
+```
+=======
 ## Environment Sample
 
 ```bash
