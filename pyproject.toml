@@ -20,6 +20,7 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 uvicorn = "^0.31.0"
 nest-asyncio = "^1.6.0"
 python-dotenv = "^1.0.1"
+aiomysql = "^0.2.0"
 
 
 [build-system]
