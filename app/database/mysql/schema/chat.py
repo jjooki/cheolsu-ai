@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, BigInteger, String, DateTime, CHAR, ForeignKey, Text
+    Column, Integer, BigInteger, VARCHAR, DateTime, CHAR, ForeignKey, Text
 )
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -11,8 +11,8 @@ class ChatMessage(Base):
     
     id = Column(BigInteger, primary_key=True, nullable=False)
     chat_room_id = Column(BigInteger, nullable=False)
-    role = Column(String(8), nullable=False, comment='user, assistant')
-    message = Column(String(1000), nullable=True)
+    role = Column(VARCHAR(8), nullable=False, comment='user, assistant')
+    message = Column(VARCHAR(1000), nullable=True)
     created_at = Column(DateTime, nullable=False, default=func.now())
     updated_at = Column(DateTime, nullable=True)
     deleted_at = Column(DateTime, nullable=True)
@@ -24,7 +24,7 @@ class ChatRoom(Base):
     __tablename__ = 'chat_room'
     
     id = Column(BigInteger, primary_key=True, nullable=False)
-    name = Column(String(100), nullable=True)
+    name = Column(VARCHAR(100), nullable=True)
     user_id = Column(BigInteger, nullable=False)
     character_id = Column(Integer, nullable=False)
     is_active = Column(CHAR(1), nullable=False, default='0')
@@ -34,3 +34,5 @@ class ChatRoom(Base):
 
     def __repr__(self):
         return f"<ChatRoom(name={self.name}, is_active={self.is_active})>"
+
+Base.metadata.create_all()

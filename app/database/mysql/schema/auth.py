@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, BigInteger, String, DateTime, CHAR, ForeignKey, Text
+    VARCHAR, Column, Integer, BigInteger, DateTime, CHAR, ForeignKey, Text
 )
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -9,7 +9,7 @@ from app.database.mysql.session import Base
 class RefreshToken(Base):
     __tablename__ = 'refresh_token'
     
-    token = Column(String(200), primary_key=True, nullable=False, comment='refresh token')
+    token = Column(VARCHAR(200), primary_key=True, nullable=False, comment='refresh token')
     created_at = Column(DateTime, nullable=False, default=func.now())
 
     def __repr__(self):
@@ -19,8 +19,8 @@ class Role(Base):
     __tablename__ = 'role'
     
     id = Column(Integer, primary_key=True, nullable=False)
-    role_name = Column(String(100), nullable=False, comment='role name')
-    description = Column(String(300), nullable=True, comment='description')
+    role_name = Column(VARCHAR(100), nullable=False, comment='role name')
+    description = Column(VARCHAR(300), nullable=True, comment='description')
     created_at = Column(DateTime, nullable=False, default=func.now())
     updated_at = Column(DateTime, nullable=True)
 
@@ -32,21 +32,23 @@ class User(Base):
     
     id = Column(BigInteger, primary_key=True, nullable=False)
     role_id = Column(Integer, nullable=False)
-    email = Column(String(100), nullable=True)
-    password = Column(String(100), nullable=True)
-    name = Column(String(100), nullable=True)
-    nickname = Column(String(100), nullable=True)
-    ci = Column(String(100), nullable=True)
-    address = Column(String(255), nullable=True)
+    email = Column(VARCHAR(100), nullable=True)
+    password = Column(VARCHAR(100), nullable=True)
+    name = Column(VARCHAR(100), nullable=True)
+    nickname = Column(VARCHAR(100), nullable=True)
+    ci = Column(VARCHAR(100), nullable=True)
+    address = Column(VARCHAR(255), nullable=True)
     country_code = Column(CHAR(3), nullable=True)
-    mobile_number = Column(String(50), nullable=True)
-    mobile_os_type = Column(CHAR(3), nullable=True)
+    mobile_number = Column(VARCHAR(50), nullable=True)
+    device_type = Column(CHAR(1), nullable=True, comment='1: PC, 2: Mobile')
+    mobile_os_type = Column(CHAR(3), nullable=True, comment='aos: Android, ios: iOS')
     birthday = Column(DateTime, nullable=True)
-    profile_bucket_name = Column(String(200), nullable=True)
-    profile_key_name = Column(String(200), nullable=True)
-    introduce = Column(String(500), nullable=True)
+    profile_bucket_name = Column(VARCHAR(200), nullable=True)
+    profile_key_name = Column(VARCHAR(200), nullable=True)
+    introduce = Column(VARCHAR(500), nullable=True)
     sns_login_type = Column(CHAR(1), nullable=True)
-    imei = Column(String(100), nullable=True)
+    imei = Column(VARCHAR(100), nullable=True)
+    mac_address = Column(VARCHAR(100), nullable=True)
     recommend_code = Column(CHAR(10), nullable=True)
     is_marketing_push_agree = Column(CHAR(1), nullable=False, default='1')
     is_pause = Column(CHAR(1), nullable=False, default='0')
@@ -59,3 +61,5 @@ class User(Base):
 
     def __repr__(self):
         return f"<User(email={self.email}, name={self.name})>"
+    
+Base.metadata.create_all()

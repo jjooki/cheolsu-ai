@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, BigInteger, String, DateTime, CHAR, ForeignKey, Text
+    Column, Integer, BigInteger, VARCHAR, DateTime, CHAR, ForeignKey, Text
 )
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -10,8 +10,8 @@ class Character(Base):
     __tablename__ = 'character'
     
     id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String(100), nullable=False, comment='character name')
-    description = Column(String(500), comment='character system prompt')
+    name = Column(VARCHAR(100), nullable=False, comment='character name')
+    description = Column(VARCHAR(500), comment='character system prompt')
     created_at = Column(DateTime, nullable=False, default=func.now())
     updated_at = Column(DateTime, nullable=True)
 
@@ -35,8 +35,8 @@ class CharacterImage(Base):
     
     id = Column(Integer, primary_key=True, nullable=False)
     character_id = Column(Integer, nullable=False)
-    profile_bucket_name = Column(String(200), comment='S3 bucket name')
-    profile_key_name = Column(String(200), comment='S3 key name')
+    profile_bucket_name = Column(VARCHAR(200), comment='S3 bucket name')
+    profile_key_name = Column(VARCHAR(200), comment='S3 key name')
     created_at = Column(DateTime, nullable=False, default=func.now())
     updated_at = Column(DateTime, nullable=True)
 
@@ -54,3 +54,5 @@ class UserCharacterImage(Base):
 
     def __repr__(self):
         return f"<UserCharacterImage(user_id={self.user_id}, character_image_id={self.character_image_id})>"
+
+Base.metadata.create_all()
