@@ -43,6 +43,10 @@ class MysqlConfig(BaseConfig):
     DATABASE: str = os.getenv("RDB_DATABASE")
     POOL_SIZE: int = int(os.getenv("RDB_POOL_SIZE", "30"))
     
+
+class MongoDBConfig(BaseConfig):
+    CONNECTION_STRING: str = os.getenv("MONGODB_CONNECTION_STRING")
+    
 class AuthenticationConfig(BaseConfig):
     JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY")
     JWT_REFRESH_SECRET_KEY: str = os.getenv("JWT_REFRESH_SECRET_KEY")
@@ -69,6 +73,9 @@ class Config(BaseConfig):
     
     # authentication
     AUTH: AuthenticationConfig = AuthenticationConfig()
+    
+    # mongodb
+    MONGODB: MongoDBConfig = MongoDBConfig()
 
 
 config: Config = Config()

@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from app.database.mysql.session import read_engine
 
 router = APIRouter()
 
@@ -8,7 +9,10 @@ async def api_health():
 
 @router.get("/mysql")
 async def mysql_ping():
-    return {"status": "ok"}
+    if await read_engine.connect():
+        return {"status": "ok"}
+    else:
+        return {"status": "error"}
 
 @router.get("/redis")
 async def redis_ping():
