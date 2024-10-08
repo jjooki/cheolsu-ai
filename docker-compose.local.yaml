@@ -7,3 +7,28 @@ services:
       - "8000"
     ports:
       - "8000:8000"
+  db:
+    image: mysql:8.0.39
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: qwer1234
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: qwer1234
+      MYSQL_DATABASE: einstein
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: always
+
+volumes:
+  mysql-db-volume:
