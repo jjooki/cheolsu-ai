@@ -40,4 +40,9 @@ OPENAI_API_KEY=sk-****
 OPENAI_CHAT_MODEL=gpt-4o-mini
 OPENAI_COMPLETION_MODEL=gpt-3.5-turbo-instruct
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+
+# S3
+S3_BUCKET_NAME=****
+S3_ACCESS_KEY_ID=****
+S3_SECRET_ACCESS_KEY=****
 ```
