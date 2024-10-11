@@ -13,7 +13,7 @@ class ChatMessage(Base):
     role = Column(VARCHAR(8), nullable=False, comment='user, assistant')
     message = Column(VARCHAR(1000))
     created_at = Column(DateTime, nullable=False, default=func.now())
-    updated_at = Column(DateTime)
+    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
     deleted_at = Column(DateTime, nullable=True)
 
     def __repr__(self):
@@ -23,13 +23,15 @@ class ChatRoom(Base):
     __tablename__ = 'chat_room'
     
     id = Column(BigInteger, primary_key=True, autoincrement=True)
-    uuid = Column(CHAR(36), nullable=False, comment='uuid4')
+    uuid = Column(CHAR(32), nullable=False, comment='uuid4')
     name = Column(VARCHAR(100))
     user_id = Column(BigInteger)
     character_id = Column(Integer, nullable=False)
+    character_image_id = Column(Integer, nullable=False)
+    model_name = Column(VARCHAR(100), nullable=False, comment='ex) gpt-4o-mini, gpt-3.5-turbo')
     is_active = Column(CHAR(1), nullable=False, default='0')
     created_at = Column(DateTime, nullable=False, default=func.now())
-    updated_at = Column(DateTime)
+    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
     deleted_at = Column(DateTime)
 
     def __repr__(self):
