@@ -1,8 +1,7 @@
 from sqlalchemy import (
-    VARCHAR, Column, Integer, BigInteger, DateTime, CHAR, ForeignKey, Text
+    VARCHAR, Column, Integer, BigInteger, DateTime, CHAR
 )
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
 
 from app.database.mysql.session import Base
 
@@ -22,7 +21,7 @@ class Role(Base):
     role_name = Column(VARCHAR(100), nullable=False, comment='role name')
     description = Column(VARCHAR(300), comment='description')
     created_at = Column(DateTime, nullable=False, default=func.now())
-    updated_at = Column(DateTime)
+    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
 
     def __repr__(self):
         return f"<Role(role_name={self.role_name})>"
@@ -57,7 +56,7 @@ class User(Base):
     out_at = Column(DateTime)
     last_login_at = Column(DateTime)
     created_at = Column(DateTime, nullable=False, default=func.now())
-    updated_at = Column(DateTime)
+    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
 
     def __repr__(self):
         return f"<User(email={self.email}, name={self.name})>"
