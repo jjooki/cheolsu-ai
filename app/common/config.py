@@ -24,7 +24,10 @@ class OpenAIConfig(BaseConfig):
     CHAT_MODEL: str = os.getenv("OPENAI_CHAT_MODEL")
     COMPLETION_MODEL: str = os.getenv("OPENAI_COMPLETION_MODEL")
     EMBEDDING_MODEL: str = os.getenv("OPENAI_EMBEDDING_MODEL")
+    IMAGE_MODEL: str = os.getenv("OPENAI_IMAGE_MODEL")
     BASE_URL: str = os.getenv("OPENAI_BASE_URL")
+    RETRY: int = int(os.getenv("OPENAI_RETRY", "3"))
+    OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "deepseek/deepseek-chat")
 
 
 class PineconeConfig(BaseConfig):

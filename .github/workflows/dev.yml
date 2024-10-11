@@ -60,6 +60,9 @@ jobs:
         OPENAI_CHAT_MODEL: gpt-4o-mini
         OPENAI_COMPLETION_MODEL: gpt-3.5-turbo-instruct
         OPENAI_EMBEDDING_MODEL: text-embedding-3-small
+        OPENROUTER_MODEL: deepseek/deepseek-chat
+        OPENAI_IMAGE_MODEL: dall-e-3
+        OPENAI_RETRY: 3
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY_DEV }}
         PINECONE_INDEX_NAME: dev-jp-news
         PINECONE_NAMESPACE: yahoo
@@ -95,6 +98,9 @@ jobs:
         echo -e "OPENAI_CHAT_MODEL=$OPENAI_CHAT_MODEL" >> .env
         echo -e "OPENAI_COMPLETION_MODEL=$OPENAI_COMPLETION_MODEL" >> .env
         echo -e "OPENAI_EMBEDDING_MODEL=$OPENAI_EMBEDDING_MODEL" >> .env
+        echo -e "OPENAI_IMAGE_MODEL=$OPENAI_IMAGE_MODEL" >> .env
+        echo -e "OPENAI_RETRY=$OPENAI_RETRY" >> .env
+        echo -e "OPENROUTER_MODEL=$OPENROUTER_MODEL" >> .env
         echo -e "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
         echo -e "PINECONE_INDEX_NAME=$PINECONE_INDEX_NAME" >> .env
         echo -e "PINECONE_NAMESPACE=$PINECONE_NAMESPACE" >> .env
