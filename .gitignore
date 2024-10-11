@@ -1,6 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/linux,jupyternotebooks,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,jupyternotebooks,python
 /data
+*.ipynb
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos
