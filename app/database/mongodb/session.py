@@ -1,6 +1,6 @@
 import pymongo
 
-from typing import List
+from typing import Any, List
 
 from app.common.config import config
 
@@ -64,19 +64,23 @@ class MongoHandler:
         self,
         data: dict=None,
         collection_name: str=None
-    ):  # 단일 Document 삽입
+    ) -> Any:  # 단일 Document 삽입
         if collection_name is None:
             collection_name = self._collection_name
-        self._mongo[self._db_name][collection_name].insert_one(data)
+        
+        result = self._mongo[self._db_name][collection_name].insert_one(data)
+        return result.inserted_id
 
     def insert_many(
         self,
         data: List[dict]=None,
         collection_name: str=None
-    ):  #다중 Document 삽입
+    ) -> List[Any]:  #다중 Document 삽입
         if collection_name is None:
             collection_name = self._collection_name
-        self._mongo[self._db_name][collection_name].insert_many(data)
+        
+        result = self._mongo[self._db_name][collection_name].insert_many(data)
+        return result.inserted_ids
 
     def update_one(
         self,
@@ -90,7 +94,7 @@ class MongoHandler:
         result = self._mongo[self._db_name][collection_name].update_one(
             filter=condition, update=update_value, upsert=upsert
         )
-        return result
+        return result.upserted_id
 
     def update_many(
         self,
@@ -105,27 +109,27 @@ class MongoHandler:
         result = self._mongo[self._db_name][collection_name].update_many(
             filter=condition, update=update_value, upsert=upsert
         )
-        return result
+        return result.upserted_id
 
     def delete_one(
         self,
         condition: dict=None,
         collection_name: str=None
-    ):  # 단일 Document 삭제 
+    ) -> int:  # 단일 Document 삭제 
         if collection_name is None:
             collection_name = self._collection_name
         result = self._mongo[self._db_name][collection_name].delete_one(condition)
-        return result
+        return result.deleted_count
 
     def delete_many(
         self,
         condition: dict=None,
         collection_name: str=None
-    ):  # 다중 Document 삭제
+    ) -> int:  # 다중 Document 삭제
         if collection_name is None:
             collection_name = self._collection_name
         results = self._mongo[self._db_name][collection_name].delete_many(condition)
-        return results
+        return results.deleted_count
     
     def aggregate(
         self,

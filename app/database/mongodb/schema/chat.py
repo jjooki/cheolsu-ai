@@ -1,28 +1,15 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 @dataclass
 class ChatHistory:
-    room_id: str
-    chat_message_id: str
-    user_query: str
+    room_id: int
     messages: List[str]
     output: str
     model_name: str
-    token: str
+    input_tokens: int
     cost_usd: float
     cost_krw: float
     created_at: str
-    updated_at: str
-    
-class ImageHistory:
-    room_id: str
-    chat_message_id: str
-    user_query: str
-    messages: List[str]
-    output: bytes
-    model_name: str
-    cost_usd: float
-    cost_krw: float
-    created_at: str
-    updated_at: str
+    message_id: Optional[int] = None
+    cached_tokens: Optional[int] = None
