@@ -1,4 +1,5 @@
 import os
+import pytz
 
 from dotenv import load_dotenv
 from enum import Enum
@@ -17,7 +18,6 @@ class EnvironmentType(str, Enum):
 class BaseConfig(BaseSettings):
     class Config:
         case_sensitive = True
-
 
 class OpenAIConfig(BaseConfig):
     API_KEY: str = os.getenv("OPENAI_API_KEY")
@@ -64,6 +64,7 @@ class Config(BaseConfig):
     ENVIRONMENT: str = os.getenv("ENVIRONMENT_TYPE", EnvironmentType.DEVELOPMENT)
     RELEASE_VERSION: str = os.getenv("RELEASE_VERSION")
     API_PORT: int = int(os.getenv("PORT", 8000))
+    TIMEZONE = pytz.timezone(os.getenv("TIMEZONE", "Asia/Seoul"))
 
     # openai
     OPENAI: OpenAIConfig = OpenAIConfig()
