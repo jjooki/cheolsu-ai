@@ -3,12 +3,12 @@ from sqlalchemy import (
 )
 from sqlalchemy.sql import func
 
-from app.database.mysql.session import Base
+from app.database.mysql.session import Base, base_engine
 
 class RefreshToken(Base):
     __tablename__ = 'refresh_token'
     
-    token = Column(VARCHAR(200), primary_key=True, autoincrement=True, comment='refresh token')
+    token = Column(VARCHAR(200), primary_key=True, comment='refresh token')
     created_at = Column(DateTime, nullable=False, default=func.now())
 
     def __repr__(self):
@@ -61,4 +61,4 @@ class User(Base):
     def __repr__(self):
         return f"<User(email={self.email}, name={self.name})>"
     
-Base.metadata.create_all()
+Base.metadata.create_all(bind=base_engine)
