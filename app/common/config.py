@@ -14,7 +14,6 @@ class EnvironmentType(str, Enum):
     DEVELOPMENT = "development"
     PRODUCTION = "production"
 
-
 class BaseConfig(BaseSettings):
     class Config:
         case_sensitive = True
@@ -29,13 +28,11 @@ class OpenAIConfig(BaseConfig):
     RETRY: int = int(os.getenv("OPENAI_RETRY", "3"))
     OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "deepseek/deepseek-chat")
 
-
 class PineconeConfig(BaseConfig):
     INDEX_NAME: str = os.getenv("PINECONE_INDEX_NAME")
     NAMESPACE: str = os.getenv("PINECONE_NAMESPACE")
     API_KEY: str = os.getenv("PINECONE_API_KEY")
     HOST: str = os.getenv("PINECONE_HOST")
-
 
 class MysqlConfig(BaseConfig):
     HOST: str = os.getenv("RDB_HOST")
@@ -45,7 +42,6 @@ class MysqlConfig(BaseConfig):
     PORT: int = int(os.getenv("RDB_PORT", "3306"))
     DATABASE: str = os.getenv("RDB_DATABASE")
     POOL_SIZE: int = int(os.getenv("RDB_POOL_SIZE", "30"))
-    
 
 class MongoDBConfig(BaseConfig):
     CONNECTION_STRING: str = os.getenv("MONGODB_CONNECTION_STRING")
@@ -59,12 +55,18 @@ class AuthenticationConfig(BaseConfig):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 20))
     REFRESH_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_MINUTES", 60 * 24 * 7))
 
-
+class S3Config(BaseConfig):
+    BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME")
+    ACCESS_KEY_ID: str = os.getenv("S3_ACCESS_KEY_ID")
+    SECRET_ACCESS_KEY: str = os.getenv("S3_SECRET_ACCESS_KEY")
+    REGION_NAME: str = os.getenv("S3_REGION_NAME")
+    CHARACTER_PROFILE_KEY: str = os.getenv("CHARACTER_PROFILE_KEY")
+    
 class Config(BaseConfig):
     ENVIRONMENT: str = os.getenv("ENVIRONMENT_TYPE", EnvironmentType.DEVELOPMENT)
     RELEASE_VERSION: str = os.getenv("RELEASE_VERSION")
     API_PORT: int = int(os.getenv("PORT", 8000))
-    TIMEZONE = pytz.timezone(os.getenv("TIMEZONE", "Asia/Seoul"))
+    TIMEZONE: str = os.getenv("TIMEZONE", "Asia/Seoul")
 
     # openai
     OPENAI: OpenAIConfig = OpenAIConfig()
@@ -80,6 +82,9 @@ class Config(BaseConfig):
     
     # mongodb
     MONGODB: MongoDBConfig = MongoDBConfig()
+    
+    # s3
+    S3: S3Config = S3Config()
 
 
 config: Config = Config()
