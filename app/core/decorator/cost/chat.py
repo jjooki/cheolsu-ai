@@ -15,7 +15,7 @@ CHAT_MODELS = ChatModelsPrice()
 def calc_cost_chat(func):
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
-        timezone = config.TIMEZONE
+        timezone = pytz.timezone(config.TIMEZONE)
         
         room_id = kwargs.get("room_id"),
         messages = kwargs.get("messages", [])
@@ -64,7 +64,7 @@ def acalc_cost_chat(func):
     @wraps(func)
     async def wrapper(*args, **kwargs):
         result = await func(*args, **kwargs)
-        timezone = config.TIMEZONE
+        timezone = pytz.timezone(config.TIMEZONE)
         
         room_id = kwargs.get("room_id"),
         messages = kwargs.get("messages", [])
