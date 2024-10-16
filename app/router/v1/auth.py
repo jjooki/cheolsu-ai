@@ -1,22 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from starlette import status
 from sqlalchemy.orm import Session
+from typing import Optional, Annotated, Tuple, List
 
-from databases.crud.auth import get_admin, create_user, get_members
-from databases.crud.admin import update_user, update_user_grade, delete_user
-from databases.connection import get_db
-from models.auth import AdminCreateModel, AdminUpdateModel, AdminModel
-from typing import Annotated, Tuple, List
-from services.auth import GradeChecker, get_current_user
+from app.database.mysql.crud.auth import get_admin, create_user, get_members
+from app.database.mysql.session import get_session, get_read_session
+from app.database.mongodb.session import MongoHandler
+from app.model.request.auth import UserCreateModel, UserUpdateModel
+from app.model.response.auth import UserModel
+from app.factory.auth import GradeChecker, get_current_user
 
-router = APIRouter(
-    prefix="/api/v1/admin",
-    tags=["admin"],
-)
+router = APIRouter()
 
 @router.post("/signup")
-async def signup(user: AdminCreateModel,
-                 db: Annotated[Session, Depends(get_db)],):
+async def signup(
+    db: Annotated[Session, Depends(get_session)],
+    user: UserCreateModel,
+):
     db_user = get_admin(db=db, email=user.email)
     
     if db_user:
