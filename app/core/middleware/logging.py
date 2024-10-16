@@ -1,9 +1,12 @@
+import logging
+
 from typing import Optional
 
 from pydantic import BaseModel, Field
 from starlette.datastructures import Headers
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
+logger = logging.getLogger(__name__)
 
 class ResponseInfo(BaseModel):
     headers: Optional[Headers] = Field(default=None, title="Response header")
@@ -31,6 +34,7 @@ class ResponseLoggerMiddleware:
             elif message.get("type") == "http.response.body":
                 if body := message.get("body"):
                     response_info.body += body.decode("utf8")
+                    logging.info(f"response body: {response_info.body}")
 
             await send(message)
 
