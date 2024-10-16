@@ -4,13 +4,15 @@ import logging
 from contextlib import asynccontextmanager
 from contextvars import ContextVar
 from typing import AsyncGenerator
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     async_sessionmaker,
     AsyncSession
 )
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, DeclarativeMeta
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -18,19 +20,40 @@ logger = logging.getLogger(__name__)
 
 from app.common.config import config
 
-database_url = (
-    f"mysql+aiomysql://{config.DATABASE.USERNAMES}:{config.DATABASE.PASSWORD}"
-    f"@{config.DATABASE.HOST}/{config.DATABASE.DATABASE}"
+base_database_url = URL.create(
+    drivername="mysql+pymysql",
+    username=config.DATABASE.USERNAMES,
+    password=config.DATABASE.PASSWORD,
+    port=config.DATABASE.DB_PORT,
+    host=config.DATABASE.HOST,
+    database=config.DATABASE.DATABASE,
 )
-read_database_url = (
-    f"mysql+aiomysql://{config.DATABASE.USERNAMES}:{config.DATABASE.PASSWORD}"
-    f"@{config.DATABASE.RO_HOST}/{config.DATABASE.DATABASE}"
+
+database_url = URL.create(
+    drivername="mysql+aiomysql",
+    username=config.DATABASE.USERNAMES,
+    password=config.DATABASE.PASSWORD,
+    host=config.DATABASE.HOST,
+    database=config.DATABASE.DATABASE,
+    port=config.DATABASE.DB_PORT,
+)
+
+read_database_url = URL.create(
+    drivername="mysql+aiomysql",
+    username=config.DATABASE.USERNAMES,
+    password=config.DATABASE.PASSWORD,
+    host=config.DATABASE.RO_HOST,
+    database=config.DATABASE.DATABASE,
+    port=config.DATABASE.DB_PORT,
 )
 
 session_context: ContextVar[str] = ContextVar("session_context")
 
 # Use connection pooling with optimized settings
-base_engine = create_async_engine(
+base_engine = create_engine(
+    url=base_database_url, connect_args={}
+)
+write_engine = create_async_engine(
     url=database_url,
     echo=True,
     # pool_size=30,  # Increase pool size
@@ -48,7 +71,7 @@ read_engine = create_async_engine(
     pool_timeout=36000,
 )
 
-async_session = async_sessionmaker(base_engine, expire_on_commit=False)
+async_session = async_sessionmaker(write_engine, expire_on_commit=False)
 async_read_session = async_sessionmaker(read_engine, expire_on_commit=False)
 
 # Define a semaphore to limit the number of concurrent sessions
@@ -81,17 +104,14 @@ async def get_read_session() -> AsyncGenerator[AsyncSession, None]:
         session = async_read_session()
         try:
             yield session
-            await session.commit()
         except SQLAlchemyError as e:
             logger.error("Database error occurred: %s", e)
-            await session.rollback()
             raise
         except Exception as e:
             logger.error("Unexpected error occurred: %s", e)
-            await session.rollback()
             raise
         finally:
             await session.close()
             logger.info("Session closed")
 
-Base = declarative_base()
+Base: DeclarativeMeta = declarative_base()

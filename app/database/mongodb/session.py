@@ -22,7 +22,10 @@ class MongoHandler:
         
     def close(self):
         self._mongo.close()
-
+    
+    def ping(self):
+        return self._mongo.server_info()
+    
     def find_one(
         self,
         condition: dict=None,
