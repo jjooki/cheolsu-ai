@@ -39,7 +39,7 @@ class MysqlConfig(BaseConfig):
     RO_HOST: str = os.getenv("RDB_RO_HOST")
     USERNAMES: str = os.getenv("RDB_USERNAME")
     PASSWORD: str = os.getenv("RDB_PASSWORD")
-    PORT: int = int(os.getenv("RDB_PORT", "3306"))
+    DB_PORT: int = 3306
     DATABASE: str = os.getenv("RDB_DATABASE")
     POOL_SIZE: int = int(os.getenv("RDB_POOL_SIZE", "30"))
 
@@ -60,7 +60,7 @@ class S3Config(BaseConfig):
     ACCESS_KEY_ID: str = os.getenv("S3_ACCESS_KEY_ID")
     SECRET_ACCESS_KEY: str = os.getenv("S3_SECRET_ACCESS_KEY")
     REGION_NAME: str = os.getenv("S3_REGION_NAME")
-    CHARACTER_PROFILE_KEY: str = os.getenv("CHARACTER_PROFILE_KEY")
+    EXPIRATION: int = int(os.getenv("S3_EXPIRATION", 10800))    
     
 class Config(BaseConfig):
     ENVIRONMENT: str = os.getenv("ENVIRONMENT_TYPE", EnvironmentType.DEVELOPMENT)
