@@ -15,19 +15,31 @@ class RefreshToken(Base):
         return f"<RefreshToken(token={self.token})>"
 
 class Role(Base):
-    __tablename__ = 'role'
+    __tablename__ = 'role_info'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     role_name = Column(VARCHAR(100), nullable=False, comment='role name')
     description = Column(VARCHAR(300), comment='description')
-    created_at = Column(DateTime, nullable=False, default=func.now())
-    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+        server_default=func.now()
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+        server_default=func.now(),
+        onupdate=func.now(),
+        server_onupdate=func.now()
+    )
 
     def __repr__(self):
         return f"<Role(role_name={self.role_name})>"
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = 'user_info'
     
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     role_id = Column(Integer, nullable=False)
@@ -55,8 +67,20 @@ class User(Base):
     marketing_push_agreed_at = Column(DateTime)
     out_at = Column(DateTime)
     last_login_at = Column(DateTime)
-    created_at = Column(DateTime, nullable=False, default=func.now())
-    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+        server_default=func.now()
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+        server_default=func.now(),
+        onupdate=func.now(),
+        server_onupdate=func.now()
+    )
 
     def __repr__(self):
         return f"<User(email={self.email}, name={self.name})>"

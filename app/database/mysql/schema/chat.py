@@ -1,9 +1,9 @@
 from sqlalchemy import (
-    Column, Integer, BigInteger, VARCHAR, DateTime, CHAR, ForeignKey, Text
+    Column, Integer, BigInteger, VARCHAR, DateTime, CHAR
 )
 from sqlalchemy.sql import func
 
-from app.database.mysql.session import Base
+from app.database.mysql.session import Base, base_engine
 
 class ChatMessage(Base):
     __tablename__ = 'chat_message'
@@ -12,8 +12,20 @@ class ChatMessage(Base):
     chat_room_id = Column(BigInteger, nullable=False)
     role = Column(VARCHAR(8), nullable=False, comment='user, assistant')
     message = Column(VARCHAR(1000))
-    created_at = Column(DateTime, nullable=False, default=func.now())
-    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+        server_default=func.now()
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+        server_default=func.now(),
+        onupdate=func.now(),
+        server_onupdate=func.now()
+    )
     deleted_at = Column(DateTime, nullable=True)
 
     def __repr__(self):
@@ -29,12 +41,23 @@ class ChatRoom(Base):
     character_id = Column(Integer, nullable=False)
     character_image_id = Column(Integer, nullable=False)
     model_name = Column(VARCHAR(100), nullable=False, comment='ex) gpt-4o-mini, gpt-3.5-turbo')
-    is_active = Column(CHAR(1), nullable=False, default='0')
-    created_at = Column(DateTime, nullable=False, default=func.now())
-    updated_at = Column(DateTime, nullable=False, default=func.now(), onupdate=func.now())
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+        server_default=func.now()
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+        server_default=func.now(),
+        onupdate=func.now(),
+        server_onupdate=func.now()
+    )
     deleted_at = Column(DateTime)
-
+    
     def __repr__(self):
-        return f"<ChatRoom(name={self.name}, is_active={self.is_active})>"
+        return f"<ChatRoom(name={self.name}, uuid={self.uuid})>"
 
-Base.metadata.create_all()
+Base.metadata.create_all(bind=base_engine)
