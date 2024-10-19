@@ -45,6 +45,13 @@ class MysqlConfig(BaseConfig):
 
 class MongoDBConfig(BaseConfig):
     CONNECTION_STRING: str = os.getenv("MONGODB_CONNECTION_STRING")
+
+class RedisConfig(BaseConfig):
+    HOST: str = os.getenv("REDIS_HOST")
+    REDIS_PORT: int = int(os.getenv("REDIS_PORT", "6379"))
+    DB: int = int(os.getenv("REDIS_DB", "0"))
+    MAX_CONNECTIONS: int = int(os.getenv("REDIS_MAX_CONNECTIONS", "10"))
+    REDISMOD_HOST: str = os.getenv("REDISMOD_HOST", "redismod")
     
 class AuthenticationConfig(BaseConfig):
     JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY")
@@ -82,6 +89,9 @@ class Config(BaseConfig):
     
     # mongodb
     MONGODB: MongoDBConfig = MongoDBConfig()
+    
+    # redis
+    CACHE: RedisConfig = RedisConfig()
     
     # s3
     S3: S3Config = S3Config()
