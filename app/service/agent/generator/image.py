@@ -1,7 +1,9 @@
 import base64
+import io
 
 from openai import AsyncOpenAI, OpenAI
 from openai.types.images_response import ImagesResponse
+from PIL import Image
 from tenacity import retry, stop_after_attempt, wait_fixed
 from typing import Literal, Optional
 
@@ -103,4 +105,17 @@ class ImageGeneratorService:
         """
         # base64 디코딩
         image_bytes = base64.b64decode(b64_json)
+        return image_bytes
+    
+    def b64_json_to_png(self, b64_json: str, file_path: str) -> bytes:
+        """
+        Converts image bytes to PNG format.
+
+        :param image_bytes: Image bytes
+        :return: PNG image bytes
+        """
+        # 이미지 바이트를 PNG로 변환
+        image_bytes = base64.b64decode(b64_json)
+        image = Image.open(io.BytesIO(image_bytes))
+        image.save(file_path, format='PNG')
         return image_bytes

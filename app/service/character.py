@@ -1,15 +1,17 @@
+import random
 from typing import List
 from app.common.config import config
 from app.core.utils.aws import S3
+from app.database.mysql.schema.character import CharacterImage, CharacterPrompt
 
 class CharacterService:
-    def __init__(self):
+    def __init__(self, bucket_name: str = config.S3.BUCKET_NAME):
         self.s3 = S3(
             aws_access_key_id=config.S3.ACCESS_KEY_ID,
             aws_secret_access_key=config.S3.SECRET_ACCESS_KEY,
             region_name=config.S3.REGION_NAME,
         )
-        self.bucket_name = config.S3.BUCKET_NAME
+        self.bucket_name = bucket_name
     
     def get_character_image_object(self, key_name: str) -> dict:
         return self.s3.get_object(self.bucket_name, key_name)
@@ -46,8 +48,7 @@ class CharacterService:
             
         return urls
     
-    def upload_character_image_s3(self, character_id: int, file_name: str, file_path: str) -> dict:
-        key_name = f"profile/character/{character_id}/{file_name}"
+    def upload_character_image_s3(self, key_name: str, file_path: str) -> dict:
         return self.s3.upload_file(file_path, self.bucket_name, key_name)
     
     def make_character_prompt(self, prompt: str) -> dict:
