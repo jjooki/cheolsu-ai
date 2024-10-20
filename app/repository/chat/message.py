@@ -1,20 +1,20 @@
 from sqlalchemy.future import select
-from typing import Optional
+from typing import List, Literal
 
-from app.database.mysql.schema.chat import ChatRoom, ChatMessage
+from app.database.mysql.schema.chat import ChatMessage
 from app.core.repository import BaseRepository
 
 class ChatMessageRepository(BaseRepository):
     async def create_chat_message(
         self,
         chat_room_id: int,
-        user_id: int,
-        message: str
+        role: Literal['user', 'assistant'],
+        content: str
     ) -> ChatMessage:
         data = ChatMessage(
             chat_room_id=chat_room_id,
-            user_id=user_id,
-            message=message
+            role=role,
+            message=content
         )
         result = await self._add(data)
         return result
@@ -24,11 +24,26 @@ class ChatMessageRepository(BaseRepository):
         chat_room_id: int,
         offset: int = 0,
         limit: int = 10
-    ) -> ChatMessage:
+    ) -> List[ChatMessage]:
         query = (
             select(ChatMessage)
-            .filter(ChatMessage.chat_room_id == chat_room_id)
+            .filter(ChatMessage.chat_room_id == chat_room_id,
+                    ChatMessage.deleted_at.is_(None))
             .offset(offset)
+            .limit(limit)
+        )
+        return await self._all(query)
+    
+    async def get_latest_chat_messages(
+        self,
+        chat_room_id: int,
+        limit: int
+    ) -> List[ChatMessage]:
+        query = (
+            select(ChatMessage)
+            .filter(ChatMessage.chat_room_id == chat_room_id,
+                    ChatMessage.deleted_at.is_(None))
+            .order_by(ChatMessage.created_at.desc())
             .limit(limit)
         )
         return await self._all(query)
@@ -36,21 +51,23 @@ class ChatMessageRepository(BaseRepository):
     async def update_chat_message(
         self,
         message_id: int,
-        message: str
+        content: str
     ) -> ChatMessage:
         query = (
             select(ChatMessage)
-            .filter(ChatMessage.id == message_id)
+            .filter(ChatMessage.id == message_id,
+                    ChatMessage.deleted_at.is_(None))
         )
         data = await self._first(query, read_only=False)
-        data.message = message
+        data.content = content
         return data
     
     async def delete_chat_message(self, message_id: int) -> ChatMessage:
         query = (
             select(ChatMessage)
-            .filter(ChatMessage.id == message_id)
+            .filter(ChatMessage.id == message_id,
+                    ChatMessage.deleted_at.is_(None))
         )
         data = await self._first(query, read_only=False)
-        await self._delete(data)
+        data.deleted_at = self._get_current_time()
         return data

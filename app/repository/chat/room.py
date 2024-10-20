@@ -32,3 +32,10 @@ class ChatRoomRepository(BaseRepository):
                     ChatRoom.deleted_at.is_(None))
         )
         return await self._one_or_none(query)
+    
+    async def get_room_info(self, uuid: str) -> ChatRoom:
+        query = (
+            select(ChatRoom)
+            .filter(ChatRoom.uuid == uuid)
+        )
+        return await self._one_or_none(query)

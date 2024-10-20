@@ -1,5 +1,5 @@
 from sqlalchemy.future import select
-from typing import Optional
+from typing import List, Optional
 
 from app.database.mysql.schema.character import Character, CharacterPrompt
 from app.core.repository import BaseRepository
@@ -38,7 +38,14 @@ class CharacterPromptRepository(BaseRepository):
         result = await self._add(data)
         return result
 
-    async def get_character_prompt_by_id(self, character_id: int) -> CharacterPrompt:
+    async def get_character_prompt_by_id(self, character_prompt_id: int) -> CharacterPrompt:
+        query = (
+            select(CharacterPrompt)
+            .filter(CharacterPrompt.id == character_prompt_id)
+        )
+        return await self._one_or_none(query)
+    
+    async def get_character_prompt_by_character_id(self, character_id: int) -> CharacterPrompt:
         query = (
             select(CharacterPrompt)
             .filter(CharacterPrompt.character_id == character_id,
@@ -58,7 +65,7 @@ class CharacterPromptRepository(BaseRepository):
         )
         return await self._one_or_none(query)
 
-    async def get_character_prompts_by_id(self, character_id: int) -> CharacterPrompt:
+    async def get_character_prompts_by_character_id(self, character_id: int) -> List[CharacterPrompt]:
         query = (
             select(CharacterPrompt)
             .filter(CharacterPrompt.character_id == character_id,
@@ -66,7 +73,7 @@ class CharacterPromptRepository(BaseRepository):
         )
         return await self._all(query)
 
-    async def get_character_prompts_by_name(self, name: str) -> CharacterPrompt:
+    async def get_character_prompts_by_name(self, name: str) -> List[CharacterPrompt]:
         query = (
             select(CharacterPrompt)
             .join(Character)

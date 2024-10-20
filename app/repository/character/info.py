@@ -1,5 +1,5 @@
 from sqlalchemy.future import select
-from typing import Optional
+from typing import List, Optional
 
 from app.database.mysql.schema.character import Character
 from app.core.repository import BaseRepository
@@ -10,7 +10,7 @@ class CharacterInfoRepository(BaseRepository):
             name=name,
             description=description,
         )
-        self._add(data)
+        await self._add(data)
         return data
         
     async def get_character_by_id(self, character_id: int) -> Character:
@@ -20,7 +20,23 @@ class CharacterInfoRepository(BaseRepository):
         )
         return await self._one_or_none(query)
     
-    async def get_characters_by_name(self, name: str) -> Character:
+    async def get_characters(self, offset: int = 0, limit: int = 10) -> List[Character]:
+        query = (
+            select(Character)
+            .order_by(Character.name.asc())
+            .offset(offset)
+            .limit(limit)
+        )
+        return await self._all(query)
+    
+    async def get_character_by_name(self, name: str) -> Character:
+        query = (
+            select(Character)
+            .filter(Character.name == name)
+        )
+        return await self._one_or_none(query)
+    
+    async def get_characters_by_name(self, name: str) -> List[Character]:
         query = (
             select(Character)
             .filter(Character.name.like(f'%{name}%'))

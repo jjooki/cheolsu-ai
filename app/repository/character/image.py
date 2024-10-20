@@ -1,5 +1,5 @@
 from sqlalchemy.future import select
-from typing import Optional
+from typing import List
 
 from app.database.mysql.schema.character import Character, CharacterImage
 from app.core.repository import BaseRepository
@@ -19,7 +19,7 @@ class CharacterImageRepository(BaseRepository):
         result = await self._add(data)
         return result
 
-    async def get_character_images_by_id(self, character_id: int) -> CharacterImage:
+    async def get_character_images_by_id(self, character_id: int) -> List[CharacterImage]:
         query = (
             select(CharacterImage)
             .filter(CharacterImage.character_id == character_id)
@@ -27,7 +27,7 @@ class CharacterImageRepository(BaseRepository):
         )
         return await self._all(query)
 
-    async def get_character_images_by_name(self, name: str) -> CharacterImage:
+    async def get_character_images_by_name(self, name: str) -> List[CharacterImage]:
         query = (
             select(CharacterImage)
             .join(Character, Character.id == CharacterImage.character_id)
@@ -35,3 +35,10 @@ class CharacterImageRepository(BaseRepository):
             .order_by(CharacterImage.id.desc())
         )
         return await self._all(query)
+    
+    async def get_character_image_by_id(self, character_image_id: int) -> CharacterImage:
+        query = (
+            select(CharacterImage)
+            .filter(CharacterImage.id == character_image_id)
+        )
+        return await self._one_or_none(query)
