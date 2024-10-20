@@ -1,21 +1,28 @@
+from typing import List, Optional
 from pydantic import BaseModel, Field
 
+from app.model.chat import ChatMessage
+    
 class ChatMessageRequest(BaseModel):
-    chat_room_id: int = Field(
+    room_uuid: str = Field(
         ...,
-        title="Chat Room ID",
-        description="Chat Room ID",
-        examples=[1]
+        title="Room ID",
+        description="Room ID",
+        examples=["47110f3b8b194b419de0c557e9cf259d"]
     )
-    message: str = Field(
+    messages: List[ChatMessage] = Field(
         ...,
-        title="Message",
+        title="Messages",
         description="Messages",
-        examples=["Hello, How are you?"]
+        examples=[
+            {"role": "user", "content": "Hello, How are you?"},
+            {"role": "assistant", "content": "I am fine, thank you!"},
+            {"role": "user", "content": "What are you doing?"}
+        ]
     )
 
-class UserChatHistoryRequest(BaseModel):
-    chat_room_id: int = Field(
+class ChatHistoryRequest(BaseModel):
+    room_uuid: int = Field(
         ...,
         title="Chat Room ID",
         description="Chat Room ID",

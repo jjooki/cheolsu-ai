@@ -2,11 +2,11 @@ from pydantic import BaseModel, Field
 from typing import Optional
 
 class ChatRoomResponse(BaseModel):
-    room_id: int = Field(
+    room_uuid: str = Field(
         ...,
-        title="Chat Room ID",
-        description="Chat Room ID",
-        examples=[1]
+        title="Chat Room UUID",
+        description="Chat Room UUID",
+        examples=["47110f3b8b194b419de0c557e9cf259d"]
     )
     room_name: str = Field(
         ...,
@@ -14,67 +14,39 @@ class ChatRoomResponse(BaseModel):
         description="Room Name",
         examples=["Talk with einstein"]
     )
-    user_name: str = Field(
-        ...,
+    user_name: Optional[str] = Field(
+        None,
         title="User Name",
         description="User Name",
         examples=["Guest_roomId"]
     )
-    user_profile_image: bytes = Field(
-        ...,
-        title="User Image",
-        description="User Image",
-        examples=["bytes"]
+    user_profile_image_url: Optional[str] = Field(
+        None,
+        title="User Profile Image URL",
+        description="User Profile Image URL",
+        examples=["https://example.com/user_image.png"]
     )
-    character_name: int = Field(
-        1,
-        title="Character ID",
-        description="Character ID",
-        examples=[1]
+    character_name: Optional[str] = Field(
+        None,
+        title="Character Name",
+        description="Character Name",
+        examples=["Einstein"]
     )
-    character_profile_image: bytes = Field(
-        ...,
-        title="Character Image",
-        description="Character Image",
-        examples=["bytes"]
+    character_profile_image_url: Optional[str] = Field(
+        None,
+        title="Character Profile Image URL",
+        description="Character Profile Image URL",
+        examples=["https://example.com/character_image.png"]
     )
-    created_at: str = Field(
-        ...,
+    created_at: Optional[str] = Field(
+        None,
         title="Created At",
         description="Created At",
         examples=["2024-10-12T12:00:00+09:00"]
     )
-    updated_at: str = Field(
-        ...,
+    updated_at: Optional[str] = Field(
+        None,
         title="Updated At",
         description="Updated At",
         examples=["2024-10-12T12:00:00+09:00"]
-    )
-    
-class UserChatRoomRequest(BaseModel):
-    room_id: int = Field(
-        ...,
-        title="Room ID",
-        description="Room ID",
-        examples=[1]
-    )
-    user_id: int = Field(
-        ...,
-        title="User ID",
-        description="User ID",
-        examples=[1]
-    )
-    
-class UserChatRoomListRequest(BaseModel):
-    user_id: int = Field(
-        ...,
-        title="User ID",
-        description="User ID",
-        examples=[1]
-    )
-    charcter_id: Optional[int] = Field(
-        None,
-        title="Character ID",
-        description="Character ID",
-        examples=[1]
     )
