@@ -78,7 +78,7 @@ async_read_session = async_sessionmaker(read_engine, expire_on_commit=False)
 sem = asyncio.Semaphore(30)  # Adjust the limit based on your requirements
 
 # Uncomment asynccontextmanager for test
-@asynccontextmanager
+# @asynccontextmanager
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with sem:
         session = async_session()
@@ -98,7 +98,7 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
             logger.info("Session closed")
 
 # Uncomment asynccontextmanager for test
-@asynccontextmanager
+# @asynccontextmanager
 async def get_read_session() -> AsyncGenerator[AsyncSession, None]:
     async with sem:
         session = async_read_session()

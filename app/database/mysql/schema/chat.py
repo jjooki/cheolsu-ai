@@ -11,7 +11,7 @@ class ChatMessage(Base):
     id = Column(BigInteger, primary_key=True, autoincrement=True)
     chat_room_id = Column(BigInteger, nullable=False)
     role = Column(VARCHAR(8), nullable=False, comment='user, assistant')
-    message = Column(VARCHAR(1000))
+    content = Column(VARCHAR(2000))
     created_at = Column(
         DateTime(timezone=True),
         nullable=False,
@@ -39,6 +39,7 @@ class ChatRoom(Base):
     name = Column(VARCHAR(100))
     user_id = Column(BigInteger)
     character_id = Column(Integer, nullable=False)
+    character_prompt_id = Column(Integer, nullable=False)
     character_image_id = Column(Integer, nullable=False)
     model_name = Column(VARCHAR(100), nullable=False, comment='ex) gpt-4o-mini, gpt-3.5-turbo')
     created_at = Column(
