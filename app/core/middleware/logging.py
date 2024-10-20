@@ -34,7 +34,7 @@ class ResponseLoggerMiddleware:
             elif message.get("type") == "http.response.body":
                 if body := message.get("body"):
                     response_info.body += body.decode("utf8")
-                    logging.info(f"response body: {response_info.body}")
+                    # logging.info(f"response body: {response_info.body}")
 
             await send(message)
 
