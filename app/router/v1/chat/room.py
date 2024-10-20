@@ -7,17 +7,16 @@ from datetime import datetime
 from typing import Iterable, List, Annotated
 
 from app.common.config import config
-from app.database.mysql.crud.chat.room import create_guest_room
-from app.database.mysql.crud.character import get_random_character_image_by_id
-from app.database.mysql.session import AsyncSession, get_session, get_read_session
-from app.model.request.chat import ChatRoomCreateRequest, ChatRoomRequest
-from app.model.response.chat import ChatRoomResponse
+from app.controller import ChatController, CharacterController
+from app.factory import Factory
+from app.model.request.chat import ChatRoomCreateRequest, ChatRoomRequest, ChatHistoryRequest
+from app.model.response.chat import ChatRoomResponse, ChatMessageHistoryResponse
 router = APIRouter()
 
 @router.post("", response_model=ChatRoomResponse)
 async def post_chat_room(
     request: ChatRoomCreateRequest,
-    db: Annotated[AsyncSession, Depends(get_session)],
+    chat_controller: Annotated[ChatController, Depends(Factory().get_chat_controller)],
     # auth: Annotated[str, Depends(get_token_header)],
 ):
     pass
@@ -25,14 +24,23 @@ async def post_chat_room(
 @router.post("/guest", response_model=ChatRoomResponse)
 async def post_guest_room(
     request: ChatRoomCreateRequest,
-    db: Annotated[AsyncSession, Depends(get_session)],
-):
-    character_image = await get_random_character_image_by_id(db, request.character_id)
-    data = await create_guest_room(
-        db=db,
-        room_name=request.room_name,
-        character_id=request.character_id,
-        character_image_id=character_image.id,
-        model_name=request.model_name or config.OPENAI.CHAT_MODEL,
-    )
-    return data
+    chat_controller: Annotated[ChatController, Depends(Factory().get_chat_controller)],
+) -> ChatRoomResponse:
+    response = await chat_controller.create_chat_room(request=request)
+    return response
+
+@router.get("/guest", response_model=ChatRoomResponse)
+async def get_guest_room(
+    request: ChatRoomRequest,
+    chat_controller: Annotated[ChatController, Depends(Factory().get_chat_controller)],
+) -> ChatRoomResponse:
+    response = await chat_controller.get_chat_room(request=request)
+    return response
+
+@router.get("/guest/history", response_model=ChatMessageHistoryResponse)
+async def get_guest_chat_history(
+    request: ChatHistoryRequest,
+    chat_controller: Annotated[ChatController, Depends(Factory().get_chat_controller)],
+) -> ChatMessageHistoryResponse:
+    response = await chat_controller.get_user_chat_history(request=request)
+    return response

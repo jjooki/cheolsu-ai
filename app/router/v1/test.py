@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Response, HTTPException
 import boto3
+
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 
 app = FastAPI()
