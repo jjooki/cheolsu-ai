@@ -16,7 +16,8 @@ from app.model.response.character import (
     CharacterImageURLResponse,
     CharacterImageResponse,
     CharacterImageURLResponse,
-    CharacterImageFileResponse
+    CharacterImageFileResponse,
+    CharacterPromptResponse
 )
 from app.repository.character import CharacterRepository
 from app.repository.chat import ChatRepository
@@ -144,37 +145,79 @@ class CharacterController:
         delete = await self.character_repository.info.delete_character(character_id)
         return {"message": f"Character {delete.name} has been deleted."}
     
-    async def get_character_prompt(self, character_id: int):
-        return await self.character_repository.prompt.get_character_prompt_by_id(character_id)
+    async def get_character_prompt(self, character_prompt_id: int) -> CharacterPromptResponse:
+        data = await self.character_repository.prompt.get_character_prompt_by_id(character_prompt_id)
+        return CharacterPromptResponse(
+            character_id=data.character_id,
+            prompt=data.prompt
+        )
     
-    async def get_character_prompt_by_name(self, name: str):
-        return await self.character_repository.prompt.get_character_prompt_by_name(name)
+    async def get_character_prompt_by_name(self, character_name: str):
+        data = await self.character_repository.prompt.get_character_prompt_by_name(character_name)
+        return CharacterPromptResponse(
+            character_id=data.character_id,
+            prompt=data.prompt
+        )
     
-    async def get_character_prompts(self, character_id: int):
-        return await self.character_repository.prompt.get_character_prompts_by_character_id(character_id)
-    
-    async def get_character_prompts_by_name(self, name: str):
-        return await self.character_repository.prompt.get_character_prompts_by_name(name)
-    
-    async def get_random_character_prompt(self, character_id: int):
-        data = await self.character_repository.prompt.get_character_prompts_by_character_id(character_id)
+    async def get_character_prompts_by_character_id(self, character_id: int) -> List[CharacterPromptResponse]:
+        data = await self.character_repository.prompt.get_character_prompt_list_by_character_id(character_id)
         if data:
-            return data[random.randint(0, len(data)-1)]
+            return [
+                CharacterPromptResponse(
+                    character_id=prompt.character_id,
+                    prompt=prompt.prompt
+                ) for prompt in data
+            ]
+        else:
+            return []
+    
+    async def get_character_prompts_by_name(self, name: str) -> List[CharacterPromptResponse]:
+        data = await self.character_repository.prompt.get_character_prompt_list_by_name(name)
+        if data:
+            return [
+                CharacterPromptResponse(
+                    character_id=prompt.character_id,
+                    prompt=prompt.prompt
+                ) for prompt in data
+            ]
+        else:
+            return []
+    
+    async def get_random_character_prompt(self, character_id: int) -> CharacterPromptResponse:
+        data = await self.character_repository.prompt.get_character_prompt_list_by_character_id(character_id)
+        if data:
+            result = data[random.randint(0, len(data)-1)]
+            return CharacterPromptResponse(
+                character_id=result.character_id,
+                prompt=result.prompt
+            )
         else:
             return None
         
-    async def get_random_character_prompt_by_name(self, name: str):
-        data = await self.character_repository.prompt.get_character_prompts_by_name(name)
+    async def get_random_character_prompt_by_name(self, name: str) -> CharacterPromptResponse:
+        data = await self.character_repository.prompt.get_character_prompt_list_by_character_id(name)
         if data:
-            return data[random.randint(0, len(data)-1)]
+            result = data[random.randint(0, len(data)-1)]
+            return CharacterPromptResponse(
+                character_id=result.character_id,
+                prompt=result.prompt
+            )
         else:
             return None
     
-    async def create_character_prompt_by_id(self, character_id: int, prompt: str):
-        return await self.character_repository.prompt.create_character_prompt_by_id(character_id, prompt)
+    async def create_character_prompt_by_id(self, character_id: int, prompt: str) -> CharacterPromptResponse:
+        data = await self.character_repository.prompt.create_character_prompt_by_id(character_id, prompt)
+        return CharacterPromptResponse(
+            character_id=data.character_id,
+            prompt=data.prompt
+        )
     
-    async def create_character_prompt_by_name(self, name: str, prompt: str):
-        return await self.character_repository.prompt.create_character_prompt_by_name(name, prompt)
+    async def create_character_prompt_by_name(self, name: str, prompt: str) -> CharacterPromptResponse:
+        data = await self.character_repository.prompt.create_character_prompt_by_name(name, prompt)
+        return CharacterPromptResponse(
+            character_id=data.character_id,
+            prompt=data.prompt
+        )
     
     async def create_character_image(self, character_id: int, bucket_name: str, key_name: str):
         return await self.character_repository.image.create_character_image(character_id, bucket_name, key_name)

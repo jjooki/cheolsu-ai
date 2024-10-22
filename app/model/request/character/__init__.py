@@ -1,6 +1,6 @@
 from .info import CharacterInfoCreateRequest, CharacterInfoRequest, CharacterListRequest, CharacterInfoUpdateRequest
 from .image import CharacterImageFileRequest, CharacterImageFileListRequest
-from .prompt import CharacterPromptRequest, CharacterPromptListRequest
+from .prompt import CharacterPromptCreateRequest, CharacterPromptRequest, CharacterPromptListRequest
 
 __all__ = [
     'CharacterInfoCreateRequest',
@@ -9,6 +9,7 @@ __all__ = [
     'CharacterInfoUpdateRequest',
     'CharacterImageFileRequest',
     'CharacterImageFileListRequest',
+    'CharacterPromptCreateRequest',
     'CharacterPromptRequest',
     'CharacterPromptListRequest',
 ]

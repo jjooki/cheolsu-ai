@@ -41,7 +41,8 @@ class CharacterPromptRepository(BaseRepository):
     async def get_character_prompt_by_id(self, character_prompt_id: int) -> CharacterPrompt:
         query = (
             select(CharacterPrompt)
-            .filter(CharacterPrompt.id == character_prompt_id)
+            .filter(CharacterPrompt.id == character_prompt_id,
+                    CharacterPrompt.deleted_at.is_(None))
         )
         return await self._one_or_none(query)
     
@@ -54,6 +55,14 @@ class CharacterPromptRepository(BaseRepository):
             .limit(1)
         )
         return await self._one_or_none(query)
+    
+    async def get_character_prompt_list_by_character_id(self, character_id: int) -> List[CharacterPrompt]:
+        query = (
+            select(CharacterPrompt)
+            .filter(CharacterPrompt.character_id == character_id,
+                    CharacterPrompt.deleted_at.is_(None))
+        )
+        return await self._all(query)
 
     async def get_character_prompt_by_name(self, name: str) -> CharacterPrompt:
         query = (
@@ -65,15 +74,7 @@ class CharacterPromptRepository(BaseRepository):
         )
         return await self._one_or_none(query)
 
-    async def get_character_prompts_by_character_id(self, character_id: int) -> List[CharacterPrompt]:
-        query = (
-            select(CharacterPrompt)
-            .filter(CharacterPrompt.character_id == character_id,
-                    CharacterPrompt.deleted_at.is_(None))
-        )
-        return await self._all(query)
-
-    async def get_character_prompts_by_name(self, name: str) -> List[CharacterPrompt]:
+    async def get_character_prompt_list_by_name(self, name: str) -> List[CharacterPrompt]:
         query = (
             select(CharacterPrompt)
             .join(Character)
