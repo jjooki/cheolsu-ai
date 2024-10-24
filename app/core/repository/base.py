@@ -49,12 +49,17 @@ class BaseRepository(ABC):
     
     async def _add(self, data: Any):
         self.write_session.add(data)
-        # await self.write_session.commit()
-        # await self.write_session.refresh(data)
+        await self.write_session.commit()
+        await self.write_session.refresh(data)
+        return data
+    
+    async def _update_commit(self, data: Any):
+        await self.write_session.commit()
         return data
 
     async def _delete(self, data: Any):
         await self.write_session.delete(data)
+        await self.write_session.commit()
         return data
     
     def _get_current_time(self):

@@ -84,7 +84,6 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
         session = async_session()
         try:
             yield session
-            await session.commit()
         except SQLAlchemyError as e:
             logger.error("Database error occurred: %s", e)
             await session.rollback()
