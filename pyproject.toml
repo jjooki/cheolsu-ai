@@ -26,6 +26,7 @@ boto3 = "^1.35.40"
 pytz = "^2024.2"
 redis-om = "^0.3.2"
 asyncer = "^0.0.8"
+pytest = "^8.3.3"
 
 
 [tool.poetry.group.dev.dependencies]
