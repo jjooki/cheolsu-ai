@@ -17,7 +17,7 @@ router = APIRouter()
 async def post_chat_room(
     request: ChatRoomCreateRequest,
     chat_controller: Annotated[ChatController, Depends(Factory().get_chat_controller)],
-    # auth: Annotated[str, Depends(get_token_header)],
+    # auth: Annotated[str, Depends(get_user)],
 ):
     pass
 

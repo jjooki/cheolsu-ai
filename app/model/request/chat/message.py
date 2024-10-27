@@ -14,11 +14,11 @@ class ChatMessageRequest(BaseModel):
         ...,
         title="Messages",
         description="Messages",
-        examples=[
-            {"role": "user", "content": "Hello, How are you?"},
-            {"role": "assistant", "content": "I am fine, thank you!"},
-            {"role": "user", "content": "What are you doing?"}
-        ]
+        examples=[[
+            {"role": "user", "content": "Hello, How are you?", "created_at": "2024-10-15T00:00:00+09:00"},
+            {"role": "assistant", "content": "I am fine, thank you!", "created_at": "2024-10-15T00:00:00+09:00"},
+            {"role": "user", "content": "What are you doing?", "created_at": "2024-10-15T00:00:00+09:00"}
+        ]]
     )
 
 class ChatHistoryRequest(BaseModel):
@@ -27,4 +27,18 @@ class ChatHistoryRequest(BaseModel):
         title="Chat Room ID",
         description="Chat Room ID",
         examples=[1]
+    )
+    
+class ChatLike(BaseModel):
+    message_id: int = Field(
+        ...,
+        title="Message ID",
+        description="Message ID",
+        examples=[1]
+    )
+    like: int = Field(
+        ...,
+        title="Like",
+        description="1: Like, -1: Unlike, 0: Cancel",
+        examples=[1, -1, 0]
     )

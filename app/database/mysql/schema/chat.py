@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, BigInteger, VARCHAR, DateTime, CHAR
+    Column, Integer, BigInteger, VARCHAR, DateTime, CHAR, DECIMAL
 )
 from sqlalchemy.sql import func
 
@@ -29,7 +29,22 @@ class ChatMessage(Base):
     deleted_at = Column(DateTime, nullable=True)
 
     def __repr__(self):
-        return f"<ChatMessage(role={self.role}, message={self.message})>"
+        return f"<ChatMessage(role={self.role}, message={self.content})>"
+    
+class ChatLike(Base):
+    # Only Like, Dislike
+    # Only Add row, not update because of the history
+    __tablename__ = 'chat_like'
+    
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    chat_message_id = Column(BigInteger, nullable=False, comment='chat_message.id')
+    like = Column(DECIMAL(1,0), nullable=False, comment='1: Like, -1: Dislike, 0: Cancel')
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=func.now(),
+        server_default=func.now()
+    )
 
 class ChatRoom(Base):
     __tablename__ = 'chat_room'

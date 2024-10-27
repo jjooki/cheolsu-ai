@@ -1,7 +1,7 @@
 from sqlalchemy.future import select
 from typing import List, Literal
 
-from app.database.mysql.schema.chat import ChatMessage
+from app.database.mysql.schema.chat import ChatMessage, ChatLike
 from app.core.repository import BaseRepository
 
 class ChatMessageRepository(BaseRepository):
@@ -71,3 +71,24 @@ class ChatMessageRepository(BaseRepository):
         data = await self._first(query, read_only=False)
         data.deleted_at = self._get_current_time()
         return data
+    
+    async def get_message_like_unlike(self, chat_message_id: int) -> ChatLike:
+        query = (
+            select(ChatLike)
+            .filter(ChatLike.chat_message_id == chat_message_id)
+            .order_by(ChatLike.id.desc())
+            .limit(1)
+        )
+        return await self._one_or_none(query)
+    
+    async def create_message_like(self, chat_message_id: int) -> ChatLike:
+        data = ChatLike(chat_message_id=chat_message_id, like=1)
+        return await self._add(data)
+    
+    async def create_message_unlike(self, chat_message_id: int) -> ChatLike:
+        data = ChatLike(chat_message_id=chat_message_id, like=-1)
+        return await self._add(data)
+    
+    async def cancel_message_like_unlike(self, chat_message_id: int) -> ChatLike:
+        data = ChatLike(chat_message_id=chat_message_id, like=0)
+        return await self._add(data)

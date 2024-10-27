@@ -20,7 +20,6 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./data/:/var/lib/mysql
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
     healthcheck:
       test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD

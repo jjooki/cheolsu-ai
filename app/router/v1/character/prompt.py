@@ -19,7 +19,7 @@ async def create_character_prompt(
         prompt=request.prompt
     )
     
-@router.get("/{character_prompt_id}", response_model=CharacterPromptResponse)
+@router.get("", response_model=CharacterPromptResponse)
 async def get_character_prompt(
     character_prompt_id: int,
     character_controller: Annotated[CharacterController, Depends(Factory().get_character_controller)]
@@ -27,28 +27,28 @@ async def get_character_prompt(
     return await character_controller.get_character_prompt(character_prompt_id)
 
 @router.get("/random", response_model=CharacterPromptResponse)
-async def get_character_prompt(
+async def get_character_random_prompt(
     character_id: int,
     character_controller: Annotated[CharacterController, Depends(Factory().get_character_controller)]
 ) -> CharacterPromptResponse:
     return await character_controller.get_random_character_prompt(character_id)
 
 @router.get("/random/name", response_model=CharacterPromptResponse)
-async def get_character_prompt(
+async def get_character_random_prompt_by_name(
     character_name: str,
     character_controller: Annotated[CharacterController, Depends(Factory().get_character_controller)]
 ) -> CharacterPromptResponse:
     return await character_controller.get_random_character_prompt_by_name(name=character_name)
 
 @router.get("/list", response_model=List[CharacterPromptResponse])
-async def get_character_prompt(
+async def get_character_all_prompts(
     character_id: int,
     character_controller: Annotated[CharacterController, Depends(Factory().get_character_controller)]
 ) -> List[CharacterPromptResponse]:
     return await character_controller.get_character_prompts_by_character_id(character_id)
 
 @router.get("/list/name", response_model=List[CharacterPromptResponse])
-async def get_character_prompt(
+async def get_character_all_prompts_by_name(
     character_name: str,
     character_controller: Annotated[CharacterController, Depends(Factory().get_character_controller)]
 ) -> List[CharacterPromptResponse]:
