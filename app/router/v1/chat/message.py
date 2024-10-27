@@ -18,7 +18,7 @@ async def create_chat_message(
     return await chat_controller.generate_chat_message(request=request)
 
 @router.post("/stream")
-async def create_chat_message(
+async def create_stream_chat_message(
     request: ChatMessageRequest,
     chat_controller: Annotated[ChatController, Depends(Factory().get_chat_controller)],
 ) -> StreamingResponse:
